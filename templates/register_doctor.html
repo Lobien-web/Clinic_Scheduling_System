@@ -1,0 +1,27 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Doctor Register</title>
+</head>
+<body>
+
+    <h2>Register Doctor</h2>
+    <form action="{% url 'PushRegisterPageDoctor'%}" method="POST">
+         {% csrf_token %}
+        <p>Username</p>
+        <input name="username" type="text">
+        <p>Email</p>
+        <input name="email" type="email">
+        <p>Password</p>
+        <input name="password" type="password">
+        <p>Confirm Password</p>
+        <input name="password_conf" type="password">
+        
+        <input type="submit">
+
+    </form>
+    
+</body>
+</html>

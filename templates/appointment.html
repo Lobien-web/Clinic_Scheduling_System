@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <form action='{% url 'Push_schedule' %}' method="POST" id="appointment_POST">
+      {% csrf_token %} {{ form.as_p }}
+      <p>Available Doctors</p>
+      <select name="doctor" id="avail_doctor">
+        {%for d in doctor %}
+        <option name="doc_id" value="{{d.id}}">{{d.doctor_name}}</option>
+        {%endfor%}
+      </select>
+      <p>Date</p>
+      <input type="date" name="sched_date" />
+      <input type="time" name="sched_time" />
+      <input type="submit" />
+    </form>
+  </body>
+</html>
+<h1>Appointment</h1>
