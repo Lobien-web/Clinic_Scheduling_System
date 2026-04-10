@@ -32,6 +32,13 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+LEAFLET_CONFIG = {
+    "DEFAULT_CENTER": (37.7749, -122.4194),  # Latitude, Longitude
+    "DEFAULT_ZOOM": 12,
+    "MIN_ZOOM": 3,
+    "MAX_ZOOM": 18,
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +55,7 @@ INSTALLED_APPS = [
     'apps.app_doctorspreview',
     'apps.app_register',
     'tailwind',
+
     
     
 

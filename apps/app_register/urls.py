@@ -6,4 +6,5 @@ urlpatterns = [
     path('registerdoctor/',views.RegisterPageDoctor, name='RegistrationPageDoctor'),
     path('PushRegisterPage/', views.PushRegisterPage, name='PushRegisterPage'),
     path('PushRegisterPageDoctor/', views.PushRegisterPageDoctor, name='PushRegisterPageDoctor'),
+    
 ]

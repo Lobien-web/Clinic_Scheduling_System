@@ -1,12 +1,160 @@
-{% extends "base.html" %} {% block title %}Young stunna clinic{% endblock %}
+{% extends "base_doctor.html" %}
 {%block content %}
-<div class="flex flex-col gap-12">
 
-    <h1 class="text-4xl font-bold text-blue-500">Doctor Dashboard</h1>
+<div id="fullcontainer" class="flex gap-4 border h-screen w-9/12 border-2 fixed right-12">
 
-    <div>
-        <a class="border p-2 rounded-xl text-white font-bold bg-blue-500" href="/appointment/Set_schedule">Book
-            now</a><br />
+    <div id="container_scheduled_info_basic" class="
+     min-h-full flex flex-col p-4 w-full justify-between gap-2 min-h-full">
+
+        <ul class="flex flex-col gap-4">
+            {% for s in schedules%}
+            <div class="w-full p-4 gap-2 flex border-2 rounded-xl
+    {% if s.sched_status %}
+        bg-green-50 border-green-400
+    {% else %}
+        bg-red-50 border-red-400
+    {% endif %}
+">
+                <li class="w-full  h-full">
+                    <form action="{% url 'status' schedule_id=s.id %}" method="POST">
+                        <div class="flex w-full h-full justify-between">
+                            <img src="{{ s.sched_patient.pat_img.url }}" class="w-12 h-12 rounded-full object-cover">
+                            <div class="flex">
+                                {% csrf_token %}
+                                <br>
+                                {{s.sched_patient}} <br>
+                                {{s.sched_date}} <br>
+                                {{s.sched_time}} <br>
+
+                            </div>
+                            <div>
+                                {% if not s.sched_status %}
+                                <button type="submit" name="action" value="approve"
+                                    class="px-3 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">
+                                    Approve
+                                </button>
+                                {% else %}
+                                <button type="submit" name="action" value="complete"
+                                    class="px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+                                    Complete
+                                </button>
+                                <button type="submit" name="action" value="cancel"
+                                    class="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
+                                    Cancel
+                                </button>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                </li>
+
+            </div>
+
+            {% endfor %}
+        </ul>
+
+
     </div>
-    {% endblock %}
+    <div id="Accepted" class="min-h-full flex flex-col p-4 w-full justify-between gap-2 min-h-full">
+
+        <ul class="flex flex-col gap-4">
+            {% for s in schedulesAccepted%}
+            <div class="w-full p-4 gap-2 flex border-2 rounded-xl
+    {% if s.sched_status %}
+        bg-green-50 border-green-400
+    {% else %}
+        bg-red-50 border-red-400
+    {% endif %}
+">
+                <li class="w-full  h-full">
+                    <form action="{% url 'status' schedule_id=s.id %}" method="POST">
+                        <div class="flex w-full h-full justify-between">
+                            <img src="{{ s.sched_patient.pat_img.url }}" class="w-12 h-12 rounded-full object-cover">
+                            <div class="flex">
+                                {% csrf_token %}
+                                <br>
+                                {{s.sched_patient}} <br>
+                                {{s.sched_date}} <br>
+                                {{s.sched_time}} <br>
+
+                            </div>
+                            <div>
+                                {% if not s.sched_status %}
+                                <button type="submit" name="action" value="approve"
+                                    class="px-3 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">
+                                    Approve
+                                </button>
+                                {% else %}
+                                <button type="submit" name="action" value="complete"
+                                    class="px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+                                    Complete
+                                </button>
+                                <button type="submit" name="action" value="cancel"
+                                    class="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
+                                    Cancel
+                                </button>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                </li>
+
+            </div>
+
+            {% endfor %}
+        </ul>
+
+
+
+    </div>
+    <div id="Completed" class="min-h-full flex flex-col p-4 w-full justify-between gap-2 min-h-full">
+
+        <ul class="flex flex-col gap-4">
+            {% for s in schedulesCompleted%}
+            <div class="w-full p-4 gap-2 flex border-2 rounded-xl
+    {% if s.sched_status %}
+        bg-green-50 border-green-400
+    {% else %}
+        bg-red-50 border-red-400
+    {% endif %}
+">
+                <li class="w-full  h-full">
+                    <form action="{% url 'status' schedule_id=s.id %}" method="POST">
+                        <div class="flex w-full h-full justify-between">
+                            <img src="{{ s.sched_patient.pat_img.url }}" class="w-12 h-12 rounded-full object-cover">
+                            <div class="flex">
+                                {% csrf_token %}
+                                <br>
+                                {{s.sched_patient}} <br>
+                                {{s.sched_date}} <br>
+                                {{s.sched_time}} <br>
+
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                </li>
+
+            </div>
+
+            {% endfor %}
+        </ul>
+
+
+
+    </div>
+
+
 </div>
+
+{% endblock content%}

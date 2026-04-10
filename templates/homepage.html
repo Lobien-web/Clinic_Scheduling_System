@@ -1,11 +1,53 @@
-{% extends "base.html" %} {% block title %}Young stunna clinic{% endblock %}
+{% extends "base.html" %} {% block title %}Clinic System{% endblock %}
 {%block content %}
-<h1 class="text-4xl font-bold text-blue-500">Clinic System</h1>
-THIS IS HOME PAGE
-<a href="/register">Are you a patient?</a><br />
-<a href="/registerdoctor">Are you a Doctor?</a><br />
+
+<div class=" h-screen w-full items-center ">
 
 
-<a href="/appointment/Set_schedule">Book now</a><br />
-<a href="/doctors">Our doctors</a><br />
+    <section id="introduction"
+        class="flex flex-col items-center h-screen w-full justify-center pt-20 bg-gradient-to-b from-blue-800 to-white">
+    <div class="flex flex-col items-center pb-20 h-full w-full justify-center">
+        <h1 class=" text-6xl font-bold text-white">Welcome to a Clinic system</h1>
+        <div clas   s="mt-16  max-w-md">
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center flex-col gap-10">
+                    <p class="text-4xl text-white font-semibold">Are you a</p>
+                    <div class="flex gap-10">
+                        <a class="block text-center rounded-lg p-3 px-10 py-2 font-bold bg-blue-600 text-white hover:bg-blue-700 transition"
+                            href="/register">Patient?</a>
+                        <a class="block text-center  rounded-lg p-3 px-10 py-2 font-bold bg-blue-600 text-white hover:bg-blue-700 transition"
+                            href="/registerdoctor">Doctor?</a>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <section id="doctors" class="top-0 bg-white min-h-screen min-w-screen">
+
+        <div class="max-w-2xl mx-auto p-4">
+            <ul class="space-y-4">
+                {% for d in DoctorList %}
+                <li class="p-4 border flex rounded-lg shadow-xl bg-white">
+                    {% if d.doctor_img %}
+                    <img src="{{ d.doctor_img.url }}" alt="Profile picture"
+                        class="border border-blue w-24 h-24 object-cover rounded-full mt-2">
+                    {% endif %}
+                    <div class="flex flex_col">
+                        <b>{{ d.doctor_name }}</b> {{ d.doctor_role }} — {{ d.doctor_age }}
+
+                    </div>
+                </li>
+                {% empty %}
+                <li>No doctors found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </section>
+
+</div>
 {% endblock %}

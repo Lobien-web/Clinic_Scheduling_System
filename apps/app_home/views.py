@@ -1,12 +1,20 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-
+from apps.users.models import DoctorProfile
 # Create your views here.
 
 
 def Homepage(request):
-    return render(request, 'homepage.html',{'name':'stunna'})
+    doctors = DoctorProfile.objects.all()
+    return render(request, 'homepage.html',{"DoctorList": doctors})
+
+
+# Create your views here.
+
+ 
+
+
 
 @login_required
 def doctor_dashboard(request):
