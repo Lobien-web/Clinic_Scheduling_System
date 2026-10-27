@@ -1,134 +1,388 @@
+
 {% extends "base.html" %}
+
+{% block title %}Doctor Registration | Clinic System{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+    #map {
+        min-height: 380px;
+        z-index: 0;
+    }
+
+    .leaflet-container {
+        font-family: inherit;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<div class="flex  w-full p-2  min-h-screen">
 
-    <div class="flex flex-col p-24 h-full w-full">
+<section class="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
 
-        <h2 class="text-2xl font-bold ">Register Doctor</h2>
-        <form action="{% url 'PushRegisterPageDoctor'%}" method="POST" enctype="multipart/form-data"
-            class=" items-center flex flex-col p-4 gap-2  w-1/2">
+        <!-- Page Heading -->
+        <div class="mb-8">
+            <a href="/registerlanding"
+               class="text-sm font-semibold text-blue-600 hover:text-blue-800">
+                &larr; Back to account selection
+            </a>
+
+            <div class="mt-5">
+                <p class="text-sm font-bold uppercase tracking-widest text-teal-600">
+                    Healthcare Professional Portal
+                </p>
+                <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+                    Doctor Registration
+                </h1>
+                <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+                    Create your professional account, set your consultation schedule,
+                    and mark your clinic's location on the map.
+                </p>
+            </div>
+        </div>
+
+        <form action="{% url 'PushRegisterPageDoctor' %}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="grid grid-cols-1 items-start gap-8 lg:grid-cols-5">
+
             {% csrf_token %}
-            <div class="w-full">
-                <p>Username</p>
-                <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="username" type="text">
-                <p>Email</p>
-                <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="email" type="email">
-                <p>Password</p>
-                <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="password" type="password">
-                <p>Confirm Password</p>
-                <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="password_conf" type="password">
-            </div>
-            <br>
-            <h3 class="text-center text-lg font-bold">Doctor Details</h3>
-            <div class="flex flex-col gap-4 w-full">
-                <p>First name</p>
-                <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="firstname" type="text">
-                <p>Last name</p>
-                <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="lastname" type="text">
-                <p>Age</p>
-                <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="doctor_age" type="number">
-                <p>Specialization</p>
-                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="doctor_role">
-                    {%for s in specialty %}
-                    <option name="specialty" value="{{s.id}}">{{s.specialty}}</option>
-                    {%endfor%}
-                </select>
-                <p class="text-lg font-bold">Available days</p>
-                <div class="flex flex-col">
-                    {% for value,label in available_days %}
-                    <label>
-                        <input name="doctor_available_days" type="checkbox" value="{{value}}">
-                        <span>{{label}}</span>
-                    </label>
-                    {% endfor %}
+
+            <!-- Registration Details -->
+            <div class="space-y-8 lg:col-span-3">
+
+                <!-- Account Information -->
+                <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                    <div class="mb-6 flex items-center gap-4 border-b border-slate-100 pb-5">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-lg font-bold text-blue-600">
+                            01
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">Account Information</h2>
+                            <p class="mt-1 text-sm text-slate-500">Your login credentials</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                        <div>
+                            <label for="username" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Username <span class="text-red-500">*</span>
+                            </label>
+                            <input id="username" name="username" type="text"
+                                   autocomplete="username" required
+                                   placeholder="Choose a username"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="email" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Email Address <span class="text-red-500">*</span>
+                            </label>
+                            <input id="email" name="email" type="email"
+                                   autocomplete="email" required
+                                   placeholder="doctor@example.com"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Password <span class="text-red-500">*</span>
+                            </label>
+                            <input id="password" name="password" type="password"
+                                   autocomplete="new-password" required
+                                   placeholder="Create a password"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="password_conf" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Confirm Password <span class="text-red-500">*</span>
+                            </label>
+                            <input id="password_conf" name="password_conf" type="password"
+                                   autocomplete="new-password" required
+                                   placeholder="Repeat your password"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Doctor Profile -->
+                <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                    <div class="mb-6 flex items-center gap-4 border-b border-slate-100 pb-5">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-50 text-lg font-bold text-teal-600">
+                            02
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">Professional Profile</h2>
+                            <p class="mt-1 text-sm text-slate-500">Your details as a doctor</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                        <div>
+                            <label for="firstname" class="mb-2 block text-sm font-semibold text-slate-700">
+                                First Name <span class="text-red-500">*</span>
+                            </label>
+                            <input id="firstname" name="firstname" type="text"
+                                   autocomplete="given-name" required
+                                   placeholder="First name"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="lastname" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Last Name <span class="text-red-500">*</span>
+                            </label>
+                            <input id="lastname" name="lastname" type="text"
+                                   autocomplete="family-name" required
+                                   placeholder="Last name"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="doctor_age" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Age <span class="text-red-500">*</span>
+                            </label>
+                            <input id="doctor_age" name="doctor_age" type="number"
+                                   min="18" max="120" required
+                                   placeholder="Age"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="doctor_role" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Specialization <span class="text-red-500">*</span>
+                            </label>
+                            <select id="doctor_role" name="doctor_role" required
+                                    class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                                <option value="" disabled selected>Select specialization</option>
+                                {% for s in specialty %}
+                                <option value="{{ s.id }}">{{ s.specialty }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="doctor_img" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Profile Picture
+                            </label>
+                            <input id="doctor_img" name="doctor_img" type="file"
+                                   accept="image/*"
+                                   class="block w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-600 file:mr-4 file:cursor-pointer file:border-0 file:bg-blue-50 file:px-4 file:py-3 file:font-semibold file:text-blue-700 hover:file:bg-blue-100">
+                            <p class="mt-2 text-xs text-slate-400">Choose an image for your doctor profile.</p>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Schedule -->
+                <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                    <div class="mb-6 flex items-center gap-4 border-b border-slate-100 pb-5">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-lg font-bold text-indigo-600">
+                            03
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">Clinic Schedule</h2>
+                            <p class="mt-1 text-sm text-slate-500">Set your consultation availability</p>
+                        </div>
+                    </div>
+
+                    <fieldset>
+                        <legend class="mb-3 text-sm font-semibold text-slate-700">
+                            Available Days <span class="text-red-500">*</span>
+                        </legend>
+
+                        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                            {% for value, label in available_days %}
+                            <label class="flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 transition hover:border-blue-300 hover:bg-blue-50">
+                                <input name="doctor_available_days" type="checkbox"
+                                       value="{{ value }}"
+                                       class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                <span>{{ label }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        <p class="mt-2 text-xs text-slate-400">Select all days you are available.</p>
+                    </fieldset>
+
+                    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <div>
+                            <label for="doctor_schedule_time_start" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Start Time <span class="text-red-500">*</span>
+                            </label>
+                            <input id="doctor_schedule_time_start"
+                                   name="doctor_schedule_time_start" type="time" required
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="doctor_schedule_time_end" class="mb-2 block text-sm font-semibold text-slate-700">
+                                End Time <span class="text-red-500">*</span>
+                            </label>
+                            <input id="doctor_schedule_time_end"
+                                   name="doctor_schedule_time_end" type="time" required
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="clinic_name" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Clinic Name <span class="text-red-500">*</span>
+                            </label>
+                            <input id="clinic_name" name="clinic_name" type="text" required
+                                   placeholder="Enter your clinic name"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Submit -->
+                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                    <button type="submit"
+                            class="w-full rounded-xl bg-blue-600 px-6 py-4 font-bold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                        Create Doctor Account &rarr;
+                    </button>
+
+                    <p class="mt-5 text-center text-sm text-slate-500">
+                        Already have an account?
+                        <a href="{% url 'login' %}" class="font-semibold text-blue-600 hover:underline">
+                            Sign in
+                        </a>
+                    </p>
                 </div>
-                <p>Time Availability</p>
-                <div>
 
-                    <p>Time start</p>
-                    <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="doctor_schedule_time_start" type="time">
-                    <p>Time end</p>
-                    <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="doctor_schedule_time_end" type="time">
-                    <p>Clinic Name</p>
-                    <input type="text" name="clinic_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition mb-4">
-
-                </div>
-                <p>Upload Image</p>
-                <input class="" name="doctor_img" type="file">
             </div>
-            <input
-                class="hover: cursor-pointer border w-1/3 p-2 mt-4 border-transparent shadow-lg hover:shadow-xl rounded-xl text-white font-bold bg-blue-500"
-                type="submit">
 
-            <p>Already have an account? <a href="/login" class=" hover:text-blue-500">Login</a></p>
+            <!-- Clinic Location -->
+            <aside class="lg:sticky lg:top-24 lg:col-span-2">
+                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div class="p-6 sm:p-8">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 text-lg font-bold text-rose-600">
+                                04
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-slate-900">Clinic Location</h2>
+                                <p class="mt-1 text-sm text-slate-500">Pinpoint your clinic on the map</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 rounded-xl bg-blue-50 p-4">
+                            <p class="text-sm leading-6 text-blue-800">
+                                Click on the map to mark your clinic location. Your selected coordinates will be submitted with your registration.
+                            </p>
+                        </div>
+
+                        <div id="map" class="mt-5 w-full overflow-hidden rounded-xl border border-slate-200"></div>
+
+                        <p id="location-status" aria-live="polite"
+                           class="mt-4 text-sm text-amber-700">
+                            No location selected yet.
+                        </p>
+
+                        <button id="clear-location" type="button"
+                                class="mt-3 rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+                            Clear selected location
+                        </button>
+                    </div>
+
+                    <div class="border-t border-slate-100 bg-slate-50 p-6">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            Selected Coordinates
+                        </p>
+                        <div class="mt-3 grid grid-cols-2 gap-3">
+                            <div class="rounded-xl border border-slate-200 bg-white p-3">
+                                <p class="text-xs text-slate-400">Latitude</p>
+                                <p id="latitude-display" class="mt-1 break-all text-sm font-semibold text-slate-800">—</p>
+                            </div>
+                            <div class="rounded-xl border border-slate-200 bg-white p-3">
+                                <p class="text-xs text-slate-400">Longitude</p>
+                                <p id="longitude-display" class="mt-1 break-all text-sm font-semibold text-slate-800">—</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Submitted with the registration form -->
+            <input type="hidden" name="clinic_latitude" id="clinic_latitude">
+            <input type="hidden" name="clinic_longitude" id="clinic_longitude">
+
+        </form>
     </div>
-
-
-    <input type="hidden" name="clinic_latitude" id="clinic_latitude">
-    <input type="hidden" name="clinic_longitude" id="clinic_longitude">
-
-    </form>
-    <div class="flex flex-col items-center justify-center h-full w-1/2 p-8 fixed right-0 top-1/2 -translate-y-1/2">
-        <span>Select Clinic Location</span>
-
-
-        <div id="map" class="w-full h-1/2 rounded-xl shadow mt-4"></div>
-        <script>
-            // Default location (change to your country if needed)
-            const map = L.map('map').setView([14.5995, 120.9842], 13);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors',
-                referrerPolicy: "no-referrer-when-downgrade"
-            }).addTo(map);
-
-            let marker;
-
-            // When user clicks map
-            map.on('click', function (e) {
-                const lat = e.latlng.lat;
-                const lng = e.latlng.lng;
-
-                // Remove previous marker
-                if (marker) {
-                    map.removeLayer(marker);
-                }
-
-                // Add new marker
-                marker = L.marker([lat, lng]).addTo(map);
-
-                // Set values in form inputs
-                document.getElementById('clinic_latitude').value = lat;
-                document.getElementById('clinic_longitude').value = lng;
-
-                console.log(" Latitude:", lat); console.log("Longitude:", lng);
-            }); </script>
-
-    </div>
-</div>
+</section>
 
 {% endblock content %}
+
+{% block extra_scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const mapElement = document.getElementById("map");
+        if (!mapElement || typeof L === "undefined") return;
+
+        // Default map center: Manila, Philippines.
+        const map = L.map("map").setView([14.5995, 120.9842], 12);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+            referrerPolicy: "no-referrer-when-downgrade"
+        }).addTo(map);
+
+        let marker = null;
+
+        const latitudeInput = document.getElementById("clinic_latitude");
+        const longitudeInput = document.getElementById("clinic_longitude");
+        const latitudeDisplay = document.getElementById("latitude-display");
+        const longitudeDisplay = document.getElementById("longitude-display");
+        const status = document.getElementById("location-status");
+        const clearButton = document.getElementById("clear-location");
+
+        function clearLocation() {
+            if (marker) {
+                map.removeLayer(marker);
+                marker = null;
+            }
+
+            latitudeInput.value = "";
+            longitudeInput.value = "";
+            latitudeDisplay.textContent = "—";
+            longitudeDisplay.textContent = "—";
+            status.textContent = "No location selected yet.";
+            status.className = "mt-4 text-sm text-amber-700";
+        }
+
+        map.on("click", function (event) {
+            const latitude = event.latlng.lat;
+            const longitude = event.latlng.lng;
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            marker = L.marker([latitude, longitude]).addTo(map);
+            marker.bindPopup("Selected clinic location").openPopup();
+
+            latitudeInput.value = latitude.toFixed(7);
+            longitudeInput.value = longitude.toFixed(7);
+            latitudeDisplay.textContent = latitude.toFixed(7);
+            longitudeDisplay.textContent = longitude.toFixed(7);
+
+            status.textContent = "Clinic location selected successfully.";
+            status.className = "mt-4 text-sm font-semibold text-emerald-700";
+        });
+
+        clearButton.addEventListener("click", clearLocation);
+
+        // Ensure Leaflet sizes the map correctly after the layout renders.
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 100);
+    });
+</script>
+{% endblock extra_scripts %}

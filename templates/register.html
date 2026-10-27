@@ -1,66 +1,191 @@
+
 {% extends "base.html" %}
+
+{% block title %}Patient Registration | Clinic System{% endblock %}
+
 {% block content %}
 
-<div class="flex pt-24 pb-24 left-0  flex-col w-1/2 justify-center items-center min-h-screen shadow-xl">
+<section class="min-h-screen bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mx-auto grid max-w-6xl overflow-hidden rounded-3xl bg-white shadow-xl lg:grid-cols-5">
 
+      
+        <div class="relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-blue-800 via-blue-700 to-teal-600 p-8 text-white sm:p-10 lg:col-span-2">
+            <div class="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10"></div>
+            <div class="absolute -bottom-20 -left-16 h-64 w-64 rounded-full bg-teal-300/10"></div>
 
-   <form class="w-full" action=" {% url 'PushRegisterPage' %}" enctype="multipart/form-data" method="POST" {% csrf_token
-      %} <div class="w-full flex flex-col items-center ">
-      <div class="flex flex-col gap-4 w-full p-20">
-         <h2 class="text-center  text-2xl font-bold ">Register</h2>
-         <div class="grid grid-cols-2 gap-4 w-full">
+            <div class="relative">
+                <a href="/" class="text-sm font-semibold text-blue-100 hover:text-white">
+                    &larr; Back to Home
+                </a>
 
-            <div class="flex flex-col">
-               <p>Username</p>
-               <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-               focus:outline-none focus:ring-2 focus:ring-blue-500 
-               focus:border-blue-500 transition" name="username" type="text">
-            </div>
-            <div class="flex flex-col">
-               <p>Email</p>
-               <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-               focus:outline-none focus:ring-2 focus:ring-blue-500 
-               focus:border-blue-500 transition" name="email" type="email">
-            </div>
-            <div class="flex flex-col">
-               <p>Password</p>
-               <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-               focus:outline-none focus:ring-2 focus:ring-blue-500 
-               focus:border-blue-500 transition" name="password" type="password">
-            </div>
-            <div class="flex flex-col">
-               <p>Confirm Password</p>
-               <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-               focus:outline-none focus:ring-2 focus:ring-blue-500 
-               focus:border-blue-500 transition" name="password_conf" type="password">
+                <div class="mt-12 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-bold ring-1 ring-white/20">
+                    +
+                </div>
+
+                <h1 class="mt-6 text-3xl font-extrabold leading-tight sm:text-4xl">
+                    Start your journey to better health.
+                </h1>
+
+                <p class="mt-5 text-sm leading-7 text-blue-100 sm:text-base">
+                    Create your patient account to connect with healthcare professionals
+                    and make managing your clinic visits easier.
+                </p>
             </div>
 
+            <div class="relative mt-12 rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-sm">
+                <p class="text-sm font-semibold">Your health matters</p>
+                <p class="mt-2 text-sm leading-6 text-blue-100">
+                    Complete your details to get started with the Clinic System.
+                </p>
+            </div>
+        </div>
 
-         </div>
-         <h3 class="text-center text-lg mt-4 font-bold">Patient Details</h3>
-         <p>First name</p>
-         <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="firstname" type="text">
-         <p>Last name</p>
-         <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="lastname" type="text">
-         <p>Age</p>
-         <input class="w-full px-4 py-2 border border-gray-300 rounded-lg 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition" name="age" type="number">
-         <p>Upload Image</p>
-         <input class="" name="pat_img" type="file">
+      
+        <div class="p-6 sm:p-10 lg:col-span-3 lg:p-12">
 
+            <div class="mb-8">
+                <p class="text-sm font-bold uppercase tracking-widest text-blue-600">
+                    Patient Portal
+                </p>
+                <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                    Create your account
+                </h2>
+                <p class="mt-2 text-sm leading-6 text-slate-500">
+                    Enter your information below to register.
+                </p>
+            </div>
 
-         <input
-            class="hover: cursor-pointer border w-1/3 p-2 mt-4 border-transparent shadow-lg hover:shadow-xl rounded-xl text-white font-bold bg-blue-500"
-            type="submit">
-      </div>
+            <form action="{% url 'PushRegisterPage' %}"
+                  enctype="multipart/form-data"
+                  method="POST"
+                  class="space-y-8">
 
+                {% csrf_token %}
 
-</div>
-</form>
-</div>
+                <div>
+                    <h3 class="mb-4 border-b border-slate-100 pb-3 text-lg font-bold text-slate-800">
+                        Account Details
+                    </h3>
+
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                        <div>
+                            <label for="username" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Username <span class="text-red-500">*</span>
+                            </label>
+                            <input id="username" name="username" type="text"
+                                   autocomplete="username" required
+                                   placeholder="Choose a username"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="email" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Email Address <span class="text-red-500">*</span>
+                            </label>
+                            <input id="email" name="email" type="email"
+                                   autocomplete="email" required
+                                   placeholder="you@example.com"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Password <span class="text-red-500">*</span>
+                            </label>
+                            <input id="password" name="password" type="password"
+                                   autocomplete="new-password" required
+                                   placeholder="Create a password"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="password_conf" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Confirm Password <span class="text-red-500">*</span>
+                            </label>
+                            <input id="password_conf" name="password_conf" type="password"
+                                   autocomplete="new-password" required
+                                   placeholder="Repeat your password"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                    </div>
+                </div>
+
+           
+                <div>
+                    <h3 class="mb-4 border-b border-slate-100 pb-3 text-lg font-bold text-slate-800">
+                        Personal Information
+                    </h3>
+
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                        <div>
+                            <label for="firstname" class="mb-2 block text-sm font-semibold text-slate-700">
+                                First Name <span class="text-red-500">*</span>
+                            </label>
+                            <input id="firstname" name="firstname" type="text"
+                                   autocomplete="given-name" required
+                                   placeholder="Enter first name"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="lastname" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Last Name <span class="text-red-500">*</span>
+                            </label>
+                            <input id="lastname" name="lastname" type="text"
+                                   autocomplete="family-name" required
+                                   placeholder="Enter last name"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="age" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Age <span class="text-red-500">*</span>
+                            </label>
+                            <input id="age" name="age" type="number"
+                                   min="0" max="120" required
+                                   placeholder="Enter your age"
+                                   class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                        </div>
+
+                        <div>
+                            <label for="pat_img" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Profile Picture
+                            </label>
+                            <input id="pat_img" name="pat_img" type="file"
+                                   accept="image/*"
+                                   class="block w-full cursor-pointer rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-600 file:mr-4 file:cursor-pointer file:border-0 file:bg-blue-50 file:px-4 file:py-3 file:font-semibold file:text-blue-700 hover:file:bg-blue-100">
+                            <p class="mt-2 text-xs text-slate-400">
+                                Optional. Choose an image file.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+           
+                <div class="space-y-4">
+                    <button type="submit"
+                            class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                        Create Patient Account
+                        <span aria-hidden="true">&rarr;</span>
+                    </button>
+
+                    <p class="text-center text-sm text-slate-500">
+                        Already have an account?
+                        <a href="{% url 'login' %}"
+                           class="font-semibold text-blue-600 hover:text-blue-800 hover:underline">
+                            Sign in
+                        </a>
+                    </p>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</section>
+
 {% endblock content %}

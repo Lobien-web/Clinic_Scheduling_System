@@ -1,25 +1,66 @@
+
 {% extends "base.html" %}
 
-{% block content %}
-<div class="h-full w-full pt-20">
-  <div class="max-w-2xl mx-auto p-4">
-    <ul class="space-y-4">
-      {% for d in DoctorList %}
-        <li class="p-4 border flex rounded-lg shadow-xl ">
-            {% if d.doctor_img %}
-            <img src="{{ d.doctor_img.url }}" alt="Profile picture" class="border border-blue w-24 h-24 object-cover rounded-full mt-2">
-          {% endif %}
-          <div class="flex flex_col">
-            <b>{{ d.doctor_name }}</b>  {{ d.doctor_role }} — {{ d.doctor_age }}
-            
-          </div>
+{% block title %}Our Doctors{% endblock %}
 
-          
-        </li>
-      {% empty %}
-        <li>No doctors found.</li>
+{% block content %}
+<div class="min-h-screen bg-slate-50 px-4 py-12 sm:px-6 lg:px-10">
+  <div class="mx-auto max-w-6xl">
+
+    <div class="mb-10 text-center">
+      <p class="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">Expert Medical Care</p>
+      <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">Meet Our Doctors</h1>
+      <p class="mx-auto mt-4 max-w-2xl text-slate-500">
+        Get to know our healthcare professionals and find the right doctor for your needs.
+      </p>
+    </div>
+
+    {% if DoctorList %}
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {% for d in DoctorList %}
+      <div class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="h-2 bg-gradient-to-r from-blue-600 to-indigo-500"></div>
+
+        <div class="flex flex-col items-center p-7 text-center">
+          {% if d.doctor_img %}
+          <img src="{{ d.doctor_img.url }}" alt="{{ d.doctor_name }}" class="h-28 w-28 rounded-full border-4 border-blue-50 object-cover shadow-md">
+          {% else %}
+          <div class="flex h-28 w-28 items-center justify-center rounded-full border-4 border-blue-50 bg-blue-100 text-3xl font-bold text-blue-700">
+            {{ d.doctor_name|first|upper }}
+          </div>
+          {% endif %}
+
+          <h2 class="mt-5 text-xl font-bold text-slate-900">{{ d.doctor_name }}</h2>
+
+          <span class="mt-3 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-semibold text-blue-700">
+            {{ d.doctor_role }}
+          </span>
+
+          <div class="mt-5 flex w-full items-center justify-center gap-2 border-t border-slate-100 pt-5 text-sm text-slate-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+            </svg>
+            <span>{{ d.doctor_age }} years old</span>
+          </div>
+        </div>
+      </div>
       {% endfor %}
-    </ul>
+    </div>
+    {% else %}
+    <div class="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
+      <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="10" cy="7" r="4"/>
+          <path d="M20 8v6m3-3h-6"/>
+        </svg>
+      </div>
+      <h2 class="mt-4 text-xl font-bold text-slate-800">No doctors available yet</h2>
+      <p class="mt-2 text-slate-500">Please check back later for our available healthcare professionals.</p>
+    </div>
+    {% endif %}
+
   </div>
 </div>
 {% endblock %}
